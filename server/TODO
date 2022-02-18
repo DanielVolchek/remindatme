@@ -3,12 +3,19 @@ When a websocket connection is received it reads for a new message
 message contains a json structured as so:
 
 {
-    todays_date: DATE
     days_till_reminder: INT
-    body: BODY
+    reminder_time: TIME
     subject: SUBJECT
+    body: BODY
     user_email: EMAIL
 }
+
+Fields are as such:
+days_till_reminder: comes from webapp by calculation
+reminder_time: time of day specificed in 24HR time
+subject: subject of email to be sent
+body: body of email to be sent 
+user_email: email to send to
 
 Upon receiving the json it is processed into a struct
 The function will check if the date of the reminder is the same as the date of the operation
@@ -18,5 +25,7 @@ If it is on the same date,
 dispatch it to the program which will set up the emailing function
 
 Emailing function:
-Once a day using cronjob check the dates of each reminder in database
-Every day where days_till_reminder is not 0, subtract one day from each unit
+Once a day using cronjob restart go email program
+go email program checks db where days_till_reminder is not 0, subtract one day from each unit
+makes list of reminders where day is 0 and sets up time.sleep timers based on the specified time of day
+All unspecified times will be set to email at 2PM UTC

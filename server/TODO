@@ -1,0 +1,22 @@
+Server reads for websocket connections
+When a websocket connection is received it reads for a new message
+message contains a json structured as so:
+
+{
+    todays_date: DATE
+    days_till_reminder: INT
+    body: BODY
+    subject: SUBJECT
+    user_email: EMAIL
+}
+
+Upon receiving the json it is processed into a struct
+The function will check if the date of the reminder is the same as the date of the operation
+If it is not on the same date, 
+dispatch it to a database of email messages to send
+If it is on the same date,
+dispatch it to the program which will set up the emailing function
+
+Emailing function:
+Once a day using cronjob check the dates of each reminder in database
+Every day where days_till_reminder is not 0, subtract one day from each unit
